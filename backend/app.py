@@ -14,7 +14,7 @@ def create_app():
     db.init_app(app)
     security = Security(app, user_datastore)
 
-    api = Api(app)
+    api = Api(app, prefix="/api")
 
     with app.app_context():
         db.create_all()
@@ -41,6 +41,10 @@ def create_app():
 
 
 app, api = create_app()
+
+
+from controllers.authentication_apis import LoginAPI
+api.add_resource(LoginAPI, "/login")
 
 if __name__ == "__main__":
     app.run(debug=True)
