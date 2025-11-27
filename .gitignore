@@ -1,0 +1,33 @@
+# PYTHON / FLASK
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+instance/
+.env
+venv/
+env/
+*.env
+*.log
+
+# SQLite (optional)
+*.db
+*.sqlite3
+
+# VUE / NODE
+node_modules/
+dist/
+.cache/
+npm-debug.log*
+yarn-debug.log*
+package-lock.json
+
+# REDIS / CELERY
+celerybeat-schedule
+celerybeat.pid
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
