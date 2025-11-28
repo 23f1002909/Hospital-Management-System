@@ -1,8 +1,9 @@
 from flask_restful import Resource
 from flask import request, jsonify, make_response
-from flask_security import utils
+from flask_security import utils, auth_token_required
 
 from controllers.user_datastore import user_datastore
+from controllers.database import db
 
 class LoginAPI(Resource):
     def post(self):
@@ -54,3 +55,47 @@ class LoginAPI(Resource):
         }
 
         return make_response(jsonify(response), 200)
+    
+class LogoutAPI(Resource):
+    @auth_token_required
+    def post(self):
+        utils.logout_user()
+
+        response = {
+            "message" : "Logged out successfully"
+        }
+
+        return make_response(jsonify(response), 200)
+    
+
+class RegisterAPI(Resource):
+    def post(self):
+        credentials = request.get_json()
+
+        if not credentials:
+            return make_response(jsonify({"message": "Credentials Required"}), 400)
+        
+        email = credentials.get("email")
+        password = credentials.get("password")
+
+        if not email or not password:
+            return make_response(jsonify({"message": "Email and Password Required"}), 400)
+
+
+        if user_datastore.find_user(email=email):
+            return make_response(jsonify({"message": "Patient already exists"}), 400)
+
+
+        patient_role = user_datastore.find_role("patient")
+
+
+        user_datastore.create_user(
+            email=email,
+            password=password,
+            roles=[patient_role]
+        )
+
+        db.session.commit()
+
+        return make_response(jsonify({"message": "Patient Registered Successfully"}), 201)
+        

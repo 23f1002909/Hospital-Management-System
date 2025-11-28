@@ -30,6 +30,7 @@ class Doctor(db.Model):
     gender = db.Column(db.String(50))
     phone = db.Column(db.String(20))
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), unique=True)
+    department_id = db.Column(db.Integer, db.ForeignKey("department.id"))
     specialization = db.Column(db.String(255), nullable = False)
     availability = db.Column(db.JSON)
     description = db.Column(db.String(255))
@@ -81,3 +82,14 @@ class Treatment(db.Model):
     next_visit = db.Column(db.String(200))
 
     appointment = db.relationship("Appointment", backref="treatment")
+
+
+class Department(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    description = db.Column(db.String(500))
+
+    doctors = db.relationship("Doctor", backref="department", lazy=True)
+
+    def __repr__(self):
+        return f"<Department {self.name}>"

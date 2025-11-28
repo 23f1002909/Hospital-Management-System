@@ -43,8 +43,9 @@ def create_app():
 app, api = create_app()
 
 
-from controllers.authentication_apis import LoginAPI
+from controllers.authentication_apis import *
 api.add_resource(LoginAPI, "/login")
-
+api.add_resource(LogoutAPI, "/logout")
+api.add_resource(RegisterAPI, "/register")
 if __name__ == "__main__":
     app.run(debug=True)
